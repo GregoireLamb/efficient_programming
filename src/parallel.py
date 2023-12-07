@@ -23,8 +23,8 @@ class Parallel:
         for i in range(self.n_workers):
             arrays.append(arr[i::self.n_workers]) # split the array into n_workers parts
         n_sorted_arr = self.pool.map(merge_sort, arrays)
-        sorted = self.para_merge(n_sorted_arr)
-        print(sorted)
+        sorted_list = self.para_merge(n_sorted_arr)
+        return sorted_list
 
     def para_merge(self, n_sorted_arr):
         # make 2 groups
