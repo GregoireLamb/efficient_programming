@@ -119,7 +119,7 @@ class BenchmarkAnalyzer:
         # Print averages of relative differences
         dashed_line = '-' * 50
         print(dashed_line)
-        print(f'Final results: {method_name} vs py_sort')
+        print(f'Final results: {method_name}')
         print(dashed_line)
         print(f'Average relative differences for method {method_name}')
 
@@ -145,7 +145,7 @@ class BenchmarkAnalyzer:
             'memory_usage': []
         }
         for i, instance in enumerate(instances):
-            print(f'Running benchmark for instance {i + 1}/{len(instances)} of length {len(instance)}')
+            # print(f'Running benchmark for instance {i + 1}/{len(instances)} of length {len(instance)}')
 
             # Measure CPU time
             start_cpu_time = psutil.cpu_times()
@@ -176,9 +176,9 @@ class BenchmarkAnalyzer:
             process = psutil.Process(os.getpid())
             memory_info = process.memory_info()
 
-            print(f" -- Elapsed time: {elapsed_time}")
-            print(f" -- CPU time: {cpu_time_diff}")
-            print(f" -- Memory used: {memory_info.rss}")
+            # print(f" -- Elapsed time: {elapsed_time}")
+            # print(f" -- CPU time: {cpu_time_diff}")
+            # print(f" -- Memory used: {memory_info.rss}")
 
             results['elapsed_time'].append(elapsed_time)
             results['cpu_time'].append(cpu_time_diff)
