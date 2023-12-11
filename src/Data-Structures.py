@@ -23,10 +23,10 @@ def merge(left, right):
     return merged
 
 # Example usage:
-""" arr = [38, 27, 43, 3, 9, 82, 10]
+arr = [38, 27, 43, 3, 9, 82, 10]
 sorted_arr = merge_sort(arr)
 print(sorted_arr)
- """
+
 
 # The input array is converted to a NumPy array at the beginning of the merge_sort function for better array manipulation and performance.
 # The merge function now uses a list for the merged result instead of modifying the input array in place. This improves readability and avoids the need for copying the input array.
