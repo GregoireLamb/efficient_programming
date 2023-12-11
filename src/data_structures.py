@@ -1,14 +1,14 @@
 import numpy as np
 
-def merge_sort(arr):
+def merge_sort_ds(arr):
     arr = np.array(arr)
     if len(arr) <= 1:
         return arr.tolist()  # Convert back to a list for consistency with the input type
     mid = len(arr) // 2
-    left, right = merge_sort(arr[:mid]), merge_sort(arr[mid:])
-    return merge(left, right)
+    left, right = merge_sort_ds(arr[:mid]), merge_sort_ds(arr[mid:])
+    return merge_ds(left, right)
 
-def merge(left, right):
+def merge_ds(left, right):
     merged = []
     left_cursor, right_cursor = 0, 0
     while left_cursor < len(left) and right_cursor < len(right):
@@ -22,10 +22,10 @@ def merge(left, right):
     merged.extend(right[right_cursor:])
     return merged
 
-# Example usage:
-arr = [38, 27, 43, 3, 9, 82, 10]
-sorted_arr = merge_sort(arr)
-print(sorted_arr)
+# # Example usage:
+# arr = [38, 27, 43, 3, 9, 82, 10]
+# sorted_arr = merge_sort(arr)
+# print(sorted_arr)
 
 
 # The input array is converted to a NumPy array at the beginning of the merge_sort function for better array manipulation and performance.
