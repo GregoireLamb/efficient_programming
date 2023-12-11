@@ -153,7 +153,7 @@ class BenchmarkAnalyzer:
 
             try:
                 # Run the sort function with a timeout of 10 seconds
-                sorted_list = func_timeout(10, self._sort_function, args=(instance,))
+                func_timeout(10, self._sort_function, args=(instance,))
                 # assert sorted(instance) == sorted_list, f'Error in merge sort. Result is not sorted'
             except FunctionTimedOut:
                 print("Sort function exceeded time limit of 10 seconds.")
