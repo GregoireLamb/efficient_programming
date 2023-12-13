@@ -1,36 +1,35 @@
-RUN = 32  # defines threshold for running insertion sort on subsets
+def merge_insert_sort(input_arr: [], min_run: int = 32) -> []:
+    # Copy array to not sort inplace
+    arr = input_arr.copy()
+    n = len(input_arr)
 
+    if n <= 1:
+        return input_arr
 
-def merge_insert_sort(arr: [], min_run=RUN):
-    """Hybrid Implementation of mergesort and insertion sort"""
+    if n <= min_run:
+        insertion_sort(arr, 0, n - 1)
+        return arr
 
-    n = len(arr)
+    # Step 1: insertion sort on subarrays
+    for i in range(0, n, min_run):
+        insertion_sort(arr, i, min((i + min_run - 1), n - 1))
 
-    # sort smaller subarrays independently with insertion sort
-    for idx in range(0, n, min_run):
-        insertion_sort(arr, idx, min((idx + min_run - 1), n - 1))
-
-    # Merges every subarray using Merge Sort
-    while min_run < n:
-        left = 0
-
-        while left < n:
-            mid = min(left + size - 1, n - 1)
-            right = min(left + 2 * size - 1, n - 1)
-
-            merge(arr, left, mid, right)
-
-            left += size * 2
-
-        size *= 2
-
+    # Step 2: merge sort on sorted subarrays
+    window = min_run
+    while window < n:
+        for left in range(0, n, 2 * window):
+            mid = left + window - 1
+            right = min((left + 2 * window - 1), (n - 1))
+            if mid < right:
+                arr[left : right + 1] = merge(
+                    arr[left : mid + 1], arr[mid + 1 : right + 1]
+                )
+        window *= 2
     return arr
 
 
 def insertion_sort(arr: [], left: int, right: int):
-    if right is None:
-        right = len(arr) - 1
-
+    # insertion sort on slice of array arr[left:right]
     for i in range(left + 1, right + 1):
         key_item = arr[i]
         j = i - 1
@@ -40,26 +39,22 @@ def insertion_sort(arr: [], left: int, right: int):
         arr[j + 1] = key_item
 
 
-def merge(unsorted: [], left: int, middle: int, right: int) -> None:
-    len1 = middle - left + 1
-    len2 = right - middle
-    left_side = unsorted[left : middle + 1]
-    right_side = unsorted[middle + 1 : right + 1]
-
+def merge(arr1: [], arr2: []) -> []:
+    # merge to sorted subarrays
+    arr_merged = []
     i = j = 0
-    k = left
-    out = []
-    while i < len1 and j < len2:
-        if left_side[i] <= right_side[j]:
-            out.append(left_side[i])
+
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] < arr2[j]:
+            arr_merged.append(arr1[i])
             i += 1
         else:
-            out.append(right_side[j])
+            arr_merged.append(arr2[j])
             j += 1
-        k += 1
-    out.extend(left_side[i:])
-    out.extend(right_side[j:])
-    unsorted[:] = out
+
+    arr_merged.extend(arr1[i:])
+    arr_merged.extend(arr2[j:])
+    return arr_merged
 
 
 if __name__ == "__main__":
