@@ -1,8 +1,8 @@
 from merge_sort import merge_sort
-from src.benchmark_analyzer import BenchmarkAnalyzer
-from src.merge_sort import merge_sort
-from src.parallel import Parallel
-from src.inplace import merge_sort_inplace
+from benchmark_analyzer import BenchmarkAnalyzer
+from merge_sort import merge_sort
+from parallel import Parallel
+from inplace import merge_sort_inplace
 from data_structures import merge_sort_ds
 
 

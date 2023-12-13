@@ -1,6 +1,6 @@
 import multiprocessing as mp
 from multiprocessing import Process
-from src.merge_sort import merge_sort, merge
+from merge_sort import merge_sort, merge
 
 
 class Parallel:

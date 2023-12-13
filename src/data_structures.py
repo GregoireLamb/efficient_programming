@@ -21,3 +21,11 @@ def merge_ds(left, right):
     merged.extend(left[left_cursor:])
     merged.extend(right[right_cursor:])
     return merged
+
+if __name__ == "__main__":
+    my_array = [38, 45, 43, 3, 9, 82, 10]
+    qwerty = [38, 45, 43, 3, 9, 82, 10]
+
+    sorted_arr = merge_sort_ds(my_array)
+    assert sorted_arr == sorted(qwerty)
+    print(sorted_arr)
