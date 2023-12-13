@@ -9,7 +9,7 @@ from data_structures import merge_sort_ds
 def main():
     # test = [50225, 53140, 253216, 401075, 561048, 773174, 812371, 817001, 938804, 961661]
     p = Parallel(4)
-    benchmarkAnalyzer = BenchmarkAnalyzer(merge_sort_ds, first_n_lists=None)
+    benchmarkAnalyzer = BenchmarkAnalyzer(merge_sort_ds, first_n_lists=15)
     benchmarkAnalyzer.run_n_benchmarks(5)
     # p.para_merge_sort(test)
 
