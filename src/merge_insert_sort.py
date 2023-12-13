@@ -1,46 +1,93 @@
-# Merge sort baseline implementation
-def merge_insert_sort(arr, threshold: int = 10):
-    if len(arr) <= 1:
-        return arr
-
-    elif len(arr) <= threshold:
-        return insertionSort(arr)
-
-    else:
-        mid = len(arr) // 2
-        left, right = merge_insert_sort(arr[:mid]), merge_insert_sort(arr[mid:])
-        return merge(left, right, arr.copy())
+RUN = 32  # defines threshold for running insertion sort on subsets
 
 
-def merge(left, right, merged):
-    left_cursor, right_cursor = 0, 0
-    while left_cursor < len(left) and right_cursor < len(right):
-        if left[left_cursor] <= right[right_cursor]:
-            merged[left_cursor + right_cursor] = left[left_cursor]
-            left_cursor += 1
-        else:
-            merged[left_cursor + right_cursor] = right[right_cursor]
-            right_cursor += 1
-    for left_cursor in range(left_cursor, len(left)):
-        merged[left_cursor + right_cursor] = left[left_cursor]
-    for right_cursor in range(right_cursor, len(right)):
-        merged[left_cursor + right_cursor] = right[right_cursor]
-    return merged
+def merge_insert_sort(arr: [], min_run=RUN):
+    """Hybrid Implementation of mergesort and insertion sort"""
 
+    n = len(arr)
 
-# Insertion sort in Python
+    # sort smaller subarrays independently with insertion sort
+    for idx in range(0, n, min_run):
+        insertion_sort(arr, idx, min((idx + min_run - 1), n - 1))
 
+    # Merges every subarray using Merge Sort
+    while min_run < n:
+        left = 0
 
-def insertionSort(arr):
-    for step in range(1, len(arr)):
-        key = arr[step]
-        j = step - 1
+        while left < n:
+            mid = min(left + size - 1, n - 1)
+            right = min(left + 2 * size - 1, n - 1)
 
-        # Compare key with each element on the left of it until an element smaller than it is found
-        while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
-            j = j - 1
+            merge(arr, left, mid, right)
 
-        # Place key at after the element just smaller than it.
-        arr[j + 1] = key
+            left += size * 2
+
+        size *= 2
+
     return arr
+
+
+def insertion_sort(arr: [], left: int, right: int):
+    if right is None:
+        right = len(arr) - 1
+
+    for i in range(left + 1, right + 1):
+        key_item = arr[i]
+        j = i - 1
+        while j >= left and arr[j] > key_item:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key_item
+
+
+def merge(unsorted: [], left: int, middle: int, right: int) -> None:
+    len1 = middle - left + 1
+    len2 = right - middle
+    left_side = unsorted[left : middle + 1]
+    right_side = unsorted[middle + 1 : right + 1]
+
+    i = j = 0
+    k = left
+    out = []
+    while i < len1 and j < len2:
+        if left_side[i] <= right_side[j]:
+            out.append(left_side[i])
+            i += 1
+        else:
+            out.append(right_side[j])
+            j += 1
+        k += 1
+    out.extend(left_side[i:])
+    out.extend(right_side[j:])
+    unsorted[:] = out
+
+
+if __name__ == "__main__":
+    test_list = [
+        21,
+        22,
+        23,
+        1,
+        5,
+        6,
+        7,
+        2,
+        3,
+        15,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        4,
+        8,
+        9,
+        10,
+        11,
+        20,
+        24,
+        25,
+    ]
+    print(merge_insert_sort(test_list))
