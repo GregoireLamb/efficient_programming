@@ -2,12 +2,12 @@
 
 **Course**: 185.190 Efficient Programs
 
-**Team Members**:
-
-- Grégoire de Lambertye
-- Joan Salvà
-- Bernardo
-- Anton Lechuga
+**Team Members**: 
+  - Grégoire de Lambertye 
+  - Joan Salvà
+  - Bernardo Aceves
+  - Antone Melone
+  - Aleksandar Manov
 
 ## Project Description
 
