@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def merge_sort_ds(arr):
     arr = np.array(arr)
     if len(arr) <= 1:
@@ -7,6 +8,7 @@ def merge_sort_ds(arr):
     mid = len(arr) // 2
     left, right = merge_sort_ds(arr[:mid]), merge_sort_ds(arr[mid:])
     return merge_ds(left, right)
+
 
 def merge_ds(left, right):
     merged = []
