@@ -21,3 +21,4 @@ def merge(left, right, merged):
     for right_cursor in range(right_cursor, len(right)):
         merged[left_cursor + right_cursor] = right[right_cursor]
     return merged
+
