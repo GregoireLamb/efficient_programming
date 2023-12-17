@@ -1,10 +1,9 @@
-def merge_insert_sort(input_arr: [], min_run: int = 32) -> []:
+def tim_sort(arr: [], min_run: int = 32) -> []:
     # Copy array to not sort inplace
-    arr = input_arr.copy()
-    n = len(input_arr)
+    n = len(arr)
 
     if n <= 1:
-        return input_arr
+        return arr
 
     if n <= min_run:
         insertion_sort(arr, 0, n - 1)
@@ -85,4 +84,4 @@ if __name__ == "__main__":
         24,
         25,
     ]
-    print(merge_insert_sort(test_list))
+    print(tim_sort(test_list))

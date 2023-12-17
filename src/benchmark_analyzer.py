@@ -61,6 +61,9 @@ class BenchmarkAnalyzer:
         self._sort_function = self._baseline_function
         df_baseline = self.run_benchmark_for_method(instances, method_name=f'baseline')
         df = pd.concat([df_custom, df_sorted, df_baseline])
+
+        df['cores'] = cpus
+
         # If results dir does not exist, create it
         if not os.path.exists('../results'):
             os.makedirs('../results')
@@ -69,9 +72,11 @@ class BenchmarkAnalyzer:
 
         # Final results
         final_avg = self._print_final_results(df)
-        return final_avg
+        return final_avg, df
 
     def run_n_benchmarks(self, n=10):
+        results_df = pd.read_csv('../results/final_runs.csv', sep=';', decimal=',')
+
         res = {
             'elapsed_time_pysort': [],
             'memory_usage_pysort': [],
@@ -80,7 +85,9 @@ class BenchmarkAnalyzer:
         }
         for i in range(n):
             print(f'Running benchmark {i + 1}/{n}')
-            final_avg = self.run_benchmark()
+            final_avg, df = self.run_benchmark()
+            results_df = pd.concat([results_df, df]).reset_index(drop=True)
+            results_df.to_csv('../results/final_runs.csv', sep=';', decimal=',', index=False)
             print(f'Final average: {final_avg}')
             res['elapsed_time_pysort'].append(final_avg['elapsed_time_rel_diff_pysort'])
             res['memory_usage_pysort'].append(final_avg['memory_usage_rel_diff_pysort'])
@@ -172,14 +179,18 @@ class BenchmarkAnalyzer:
 
 if __name__ == '__main__':
     # from merge_sort import merge_sort
-    from src.parallel import Parallel
+    # from src.parallel import Parallel
     from src.inplace import merge_sort_inplace
-    from src.merge_insert_sort import merge_insert_sort
+    # from src.merge_insert_sort import merge_insert_sort
     from data_structures import merge_sort_ds
+    from augmented_merge_sort import AugmentedMergeSort
 
     # set cpus as half of the available cpus
-    cpus = psutil.cpu_count(logical=False) // 2 + 2
+    # cpus = psutil.cpu_count(logical=False) // 2 - 2
+    cpus_li = [2,4,6]
+    for cpus in cpus_li:
 
-    benchmark_analyzer = BenchmarkAnalyzer(merge_sort_ds, first_n_lists=15)
-    # benchmark_analyzer.run_benchmark()
-    benchmark_analyzer.run_n_benchmarks(5)
+        benchmark_analyzer = BenchmarkAnalyzer(AugmentedMergeSort(cpus).augmented_merge_sort, first_n_lists=15)
+        # benchmark_analyzer.run_benchmark()
+        benchmark_analyzer.run_n_benchmarks(5)
+
