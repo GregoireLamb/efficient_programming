@@ -6,7 +6,7 @@ from datetime import datetime
 import pandas as pd
 from func_timeout import func_timeout
 
-from src.merge_sort import merge_sort
+from merge_sort import merge_sort
 
 import numpy as np
 import psutil
@@ -172,9 +172,9 @@ class BenchmarkAnalyzer:
 
 if __name__ == '__main__':
     # from merge_sort import merge_sort
-    from src.parallel import Parallel
-    from src.inplace import merge_sort_inplace
-    from src.merge_insert_sort import merge_insert_sort
+    from parallel import Parallel
+    from inplace import merge_sort_inplace
+    from merge_insert_sort import merge_insert_sort
     from data_structures import merge_sort_ds
 
     # set cpus as half of the available cpus

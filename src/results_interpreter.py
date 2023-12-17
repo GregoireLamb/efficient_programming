@@ -19,7 +19,9 @@ def generate_histograms(prefix="method", metric="elapsed_time", csv_path='../res
 
 
     # Might change merge_sort to Baseline (depend on the bencmark)
-    baseline_times = df[df['method'] == 'merge_sort'].set_index('size')[metric]
+    #baseline_times = df[df['method'] == 'merge_sort'].set_index('size')[metric]
+    baseline_times = df[df['method'] == 'baseline'].groupby('size')['elapsed_time'].mean()
+
     df['relative_improvement'] = df.apply(lambda row: (row[metric] / baseline_times[row['size']] - 1), axis=1)
 
     sns.set(style="whitegrid")
@@ -56,4 +58,6 @@ def generate_histograms(prefix="method", metric="elapsed_time", csv_path='../res
 
 
 if __name__ == "__main__":
-    generate_histograms(prefix="tst", metric='elapsed_time', csv_path='../results/benchmark_results_2023-12-08_16-25-09.csv', parallel=False)
+    generate_histograms(prefix="data_structures", metric='elapsed_time', csv_path='../results/benchmark_results_2023-12-13_16-30-15.csv', parallel=False)
+#results\benchmark_results_2023-12-13_16-30-15.csv
+#results\benchmark_results_2023-12-13_16-29-24.csv
