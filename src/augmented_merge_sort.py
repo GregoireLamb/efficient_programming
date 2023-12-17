@@ -78,3 +78,12 @@ def insertionSort(arr):
         # Place key at after the element just smaller than it.
         arr[j + 1] = key
     return arr
+
+
+if __name__ == "__main__":
+    my_array = [38, 45, 43, 3, 9, 82, 10]
+    qwerty = [38, 45, 43, 3, 9, 82, 10]
+
+    my_array = AugmentedMergeSort(4).augmented_merge_sort(my_array)
+    assert my_array == sorted(qwerty), "Arrays are not equal: {} != {}".format(my_array, sorted(qwerty))
+    print(my_array)
