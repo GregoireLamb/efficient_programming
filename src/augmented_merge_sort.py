@@ -20,7 +20,7 @@ class AugmentedMergeSort:
         if len(arr) <= threshold:
             return insertionSort(arr)
         arrays = [arr[i::self.n_workers] for i in range(self.n_workers)]  # split the array into n_workers parts
-        sorted_list = self.para_merge(self.pool.map(merge_insert_sort, arrays))
+        sorted_list = self.para_merge(self.pool.map(insertionSort, arrays))
         return sorted_list
 
     def para_merge(self, n_sorted_arr):
@@ -35,57 +35,91 @@ class AugmentedMergeSort:
 
 
 # Merge sort baseline implementation
-def merge_insert_sort(arr, threshold: int = 10):
-    if len(arr) <= 1:
-        return arr
-
-    elif len(arr) <= threshold:
-        return insertionSort(arr)
-
-    else:
-        mid = len(arr) // 2
-        left, right = merge_insert_sort(arr[:mid]), merge_insert_sort(arr[mid:])
-        return merge(left, right, arr.copy())
-
-
-def merge(left, right, merged):
-    left_cursor, right_cursor = 0, 0
-    while left_cursor < len(left) and right_cursor < len(right):
-        if left[left_cursor] <= right[right_cursor]:
-            merged[left_cursor + right_cursor] = left[left_cursor]
-            left_cursor += 1
-        else:
-            merged[left_cursor + right_cursor] = right[right_cursor]
-            right_cursor += 1
-    for left_cursor in range(left_cursor, len(left)):
-        merged[left_cursor + right_cursor] = left[left_cursor]
-    for right_cursor in range(right_cursor, len(right)):
-        merged[left_cursor + right_cursor] = right[right_cursor]
-    return merged
+# def merge_insert_sort(arr, threshold: int = 10):
+#     if len(arr) <= 1:
+#         return arr
+#
+#     elif len(arr) <= threshold:
+#         return insertionSort(arr)
+#
+#     else:
+#         mid = len(arr) // 2
+#         left, right = merge_insert_sort(arr[:mid]), merge_insert_sort(arr[mid:])
+#         return merge(left, right, arr.copy())
+#
+#
+# def merge(left, right, merged):
+#     left_cursor, right_cursor = 0, 0
+#     while left_cursor < len(left) and right_cursor < len(right):
+#         if left[left_cursor] <= right[right_cursor]:
+#             merged[left_cursor + right_cursor] = left[left_cursor]
+#             left_cursor += 1
+#         else:
+#             merged[left_cursor + right_cursor] = right[right_cursor]
+#             right_cursor += 1
+#     for left_cursor in range(left_cursor, len(left)):
+#         merged[left_cursor + right_cursor] = left[left_cursor]
+#     for right_cursor in range(right_cursor, len(right)):
+#         merged[left_cursor + right_cursor] = right[right_cursor]
+#     return merged
 
 
 # Insertion sort in Python
 
+def merge_insert_sort(input_arr: [], min_run: int = 32) -> []:
+    # Copy array to not sort inplace
+    arr = input_arr.copy()
+    n = len(input_arr)
 
-def insertionSort(arr):
-    for step in range(1, len(arr)):
-        key = arr[step]
-        j = step - 1
+    if n <= 1:
+        return input_arr
 
-        # Compare key with each element on the left of it until an element smaller than it is found
-        while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
-            j = j - 1
+    if n <= min_run:
+        insertion_sort(arr, 0, n - 1)
+        return arr
 
-        # Place key at after the element just smaller than it.
-        arr[j + 1] = key
+    # Step 1: insertion sort on subarrays
+    for i in range(0, n, min_run):
+        insertion_sort(arr, i, min((i + min_run - 1), n - 1))
+
+    # Step 2: merge sort on sorted subarrays
+    window = min_run
+    while window < n:
+        for left in range(0, n, 2 * window):
+            mid = left + window - 1
+            right = min((left + 2 * window - 1), (n - 1))
+            if mid < right:
+                arr[left : right + 1] = merge(
+                    arr[left : mid + 1], arr[mid + 1 : right + 1]
+                )
+        window *= 2
     return arr
 
 
-if __name__ == "__main__":
-    my_array = [38, 45, 43, 3, 9, 82, 10]
-    qwerty = [38, 45, 43, 3, 9, 82, 10]
+def insertion_sort(arr: [], left: int, right: int):
+    # insertion sort on slice of array arr[left:right]
+    for i in range(left + 1, right + 1):
+        key_item = arr[i]
+        j = i - 1
+        while j >= left and arr[j] > key_item:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key_item
 
-    my_array = AugmentedMergeSort(4).augmented_merge_sort(my_array)
-    assert my_array == sorted(qwerty), "Arrays are not equal: {} != {}".format(my_array, sorted(qwerty))
-    print(my_array)
+
+def merge(arr1: [], arr2: []) -> []:
+    # merge to sorted subarrays
+    arr_merged = []
+    i = j = 0
+
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] < arr2[j]:
+            arr_merged.append(arr1[i])
+            i += 1
+        else:
+            arr_merged.append(arr2[j])
+            j += 1
+
+    arr_merged.extend(arr1[i:])
+    arr_merged.extend(arr2[j:])
+    return arr_merged
