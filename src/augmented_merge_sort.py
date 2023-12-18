@@ -18,9 +18,9 @@ class AugmentedMergeSort:
 
     def augmented_merge_sort(self, arr, threshold: int = 10):
         if len(arr) <= threshold:
-            return insertionSort(arr)
+            return merge_insert_sort(arr)
         arrays = [arr[i::self.n_workers] for i in range(self.n_workers)]  # split the array into n_workers parts
-        sorted_list = self.para_merge(self.pool.map(insertionSort, arrays))
+        sorted_list = self.para_merge(self.pool.map(merge_insert_sort, arrays))
         return sorted_list
 
     def para_merge(self, n_sorted_arr):
